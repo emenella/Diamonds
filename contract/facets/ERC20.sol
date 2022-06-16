@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.8;
 
 import "../libraries/ERC20Lib.sol";
@@ -17,10 +18,11 @@ contract ERC20Facet is IERC20, CallProtection
         require(msg.sender == ds.contractOwner, "You must be owner");
 
         //Initaliaze
+        ds.supportedInterfaces[type(IERC20).interfaceId] = true;
         es.name = _name;
         es.symbol = _symbol;
-        es.maxSupply = _maxSupply;
-        mint(msg.sender, _initSupply);
+        es.maxSupply = _maxSupply * (10 ** 18);
+        mint(msg.sender, _initSupply * (10 ** 18));
     }
 
     function name() external view returns (string memory)

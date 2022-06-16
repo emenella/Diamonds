@@ -104,6 +104,12 @@ contract DiamondLoupeFacet is IDiamondLoupe, IERC165 {
         }
     }
 
+    function initialize() external
+    {
+        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+        ds.supportedInterfaces[type(IDiamondLoupe).interfaceId] = true;
+    }
+
     /// @notice Get all the facet addresses used by a diamond.
     /// @return facetAddresses_
     function facetAddresses() external override view returns (address[] memory facetAddresses_) {

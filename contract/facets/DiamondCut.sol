@@ -58,4 +58,10 @@ contract DiamondCutFacet is IDiamondCut {
         emit DiamondCut(_diamondCut, _init, _calldata);
         LibDiamond.initializeDiamondCut(_init, _calldata);
     }
+
+    function initialize() external
+    {
+        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+        ds.supportedInterfaces[type(IDiamondCut).interfaceId] = true;
+    }
 }
