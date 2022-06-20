@@ -8,23 +8,6 @@ import "../interfaces/IERC20.sol";
 
 contract ERC20Facet is IERC20, CallProtection
 {
-    function initialize(string memory _name, string memory _symbol, uint256 _initSupply, uint256 _maxSupply) external
-    {
-        ERC20Lib.ERC20 storage es = ERC20Lib.ERC20Storage();
-        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
-        
-        require(bytes(es.name).length == 0 && bytes(es.symbol).length == 0, "ALREADY_INITIALIZED");
-        require(bytes(_name).length != 0 && bytes(_symbol).length != 0, "INVALID_PARAMS");
-        require(msg.sender == ds.contractOwner, "You must be owner");
-
-        //Initaliaze
-        ds.supportedInterfaces[type(IERC20).interfaceId] = true;
-        es.name = _name;
-        es.symbol = _symbol;
-        es.maxSupply = _maxSupply * (10 ** 18);
-        mint(msg.sender, _initSupply * (10 ** 18));
-    }
-
     function name() external view returns (string memory)
     {
         return ERC20Lib.ERC20Storage().name;
