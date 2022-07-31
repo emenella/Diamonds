@@ -65,49 +65,38 @@ describe("Diamond", () => {
         const calldata = interface.encodeFunctionData("initialize",params);
         const tx = await DiamondCutProxy.diamondCut(diamondut, Initialize.address, calldata);
         receipt = await tx.wait();
+        const ERC20Proxy = await ethers.getContractAt("IERC20", Diamond.address);
         expect(receipt.status).to.equal(1);
+    });
 
-        describe("ERC20 Test", async () => {
-
-            const ERC20Proxy = await ethers.getContractAt("IERC20", Diamond.address);
-            // complex test ERC20
-            it("ERC20 balanceOf", async () => {
-                const balance = await ERC20Proxy.balanceOf(deployer.address);
-                expect(balance).to.equal(ethers.utils.parseEther("10000"));
-            }).timeout(10000);
-            it("ERC20 transfer", async () => {
-                const tx = await ERC20Proxy.transfer(addr1, ethers.utils.parseEther("1000"));
-                const receipt = await tx.wait();
-                expect(receipt.status).to.equal(1);
-                const balance = await ERC20Proxy.balanceOf(addr1);
-                expect(balance).to.equal(ethers.utils.parseEther("1000"));
-            });
-            it("ERC20 transferFrom", async () => {
-                const tx = await ERC20Proxy.transferFrom(deployer.address, addr1, ethers.utils.parseEther("1000"));
-                const receipt = await tx.wait();
-                expect(receipt.status).to.equal(1);
-                const balance = await ERC20Proxy.balanceOf(addr1);
-                expect(balance).to.equal(ethers.utils.parseEther("1000"));
-            });
-            it("ERC20 approve", async () => {
-                const tx = await ERC20Proxy.approve(addr1, ethers.utils.parseEther("1000"));
-                const receipt = await tx.wait();
-                expect(receipt.status).to.equal(1);
-                const allowance = await ERC20Proxy.allowance(deployer.address, addr1);
-                expect(allowance).to.equal(ethers.utils.parseEther("1000"));
-            });
-            it("ERC20 transferFrom", async () => {
-                const tx = await ERC20Proxy.transferFrom(deployer.address, addr1, ethers.utils.parseEther("1000"));
-                const receipt = await tx.wait();
-                expect(receipt.status).to.equal(1);
-                const balance = await ERC20Proxy.balanceOf(addr1);
-                expect(balance).to.equal(ethers.utils.parseEther("1000"));
-            });
-
-
+        // complex test ERC20
+        it("ERC20: balanceOf", async () => {
+            const balance = await ERC20Proxy.balanceOf(addr3);
+            expect(balance).to.equal(ethers.utils.parseEther("10000"));
+        });
+        it("ERC20: transfer", async () => {
+            const tx = await ERC20Proxy.transfer(addr, ethers.utils.parseEther("1000"));
+            receipt = await tx.wait();
+            expect(receipt.status).to.equal(1);
+            const balance = await ERC20Proxy.balanceOf(addr3);
+            console.log(balance);
+            expect(balance).to.equal(ethers.utils.parseEther("1000"));
+        });
+        it("ERC20: transferFrom", async () => {
+            const tx = await ERC20Proxy.transferFrom(addr1, addr3, ethers.utils.parseEther("1000"));
+            receipt = await tx.wait();
+            expect(receipt.status).to.equal(1);
+            const balance = await ERC20Proxy.balanceOf(addr3);
+            expect(balance).to.equal(ethers.utils.parseEther("1000"));
+        });
+        it("ERC20: approve", async () => {
+            const tx = await ERC20Proxy.approve(addr, ethers.utils.parseEther("1000"));
+            receipt = await tx.wait();
+            expect(receipt.status).to.equal(1);
+            const allowance = await ERC20Proxy.allowance(addr1, addr);
+            expect(allowance).to.equal(ethers.utils.parseEther("1000"));
         });
 
 
 
-    });
 });

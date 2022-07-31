@@ -13,6 +13,7 @@ library ERC20Lib
         string symbol;
         uint256 totalSupply;
         uint256 maxSupply;
+        bool isPaused;
     }
 
     function ERC20Storage() internal pure returns (ERC20 storage ds)
@@ -50,11 +51,12 @@ library ERC20Lib
 
     function transfer(address _from, address _to, uint256 _value) internal returns (bool success)
     {
+        ERC20 storage es = ERC20Storage();
         require(_to != address(0), "address is null");
-        require(_value <= balanceOf(_from), "not enough balance");
+        require(_value <= es.balance[_from], "not enough balance");
 
-        ERC20Storage().balance[_from] -= _value;
-        ERC20Storage().balance[_to] += _value;
+        es.balance[_from] -= _value;
+        es.balance[_to] += _value;
         return true;
     }
 

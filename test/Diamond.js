@@ -62,7 +62,7 @@ describe("Diamond", () => {
             const params = ["DIamond", "DIA", ethers.utils.parseEther("10000"), ethers.utils.parseEther("100000000")];
             //get calldata
             const interface = Initialize.interface;
-            const calldata = interface.encodeFunctionData("initialize",params);
+            const calldata = interface.encodeFunctionData("initialize", params);
             const tx = await DiamondCutProxy.diamondCut(diamondut, Initialize.address, calldata);
             const receipt = await tx.wait();
             expect(receipt.status).to.equal(1);
